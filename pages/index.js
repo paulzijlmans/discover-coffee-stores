@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 
 import Banner from '../components/banner/banner';
 
@@ -22,6 +23,14 @@ export default function Home() {
           buttonText='View stores nearby'
           handleOnClick={handleOnBannerBtnClick}
         />
+        <div className={styles.heroImage}>
+          <Image
+            src='/static/hero-image.png'
+            width={700}
+            height={400}
+            alt='hero image'
+          />
+        </div>
       </main>
     </div>
   );
