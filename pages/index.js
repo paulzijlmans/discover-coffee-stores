@@ -32,11 +32,20 @@ export default function Home() {
             alt='hero image'
           />
         </div>
-        <Card
-          name='DarkHorse Coffee'
-          imgUrl='/static/hero-image.png'
-          href='/coffee-store/darkhorse-coffee'
-        />
+        <div className={styles.cardLayout}>
+          <Card
+            className={styles.card}
+            name='DarkHorse Coffee'
+            imgUrl='/static/hero-image.png'
+            href='/coffee-store/darkhorse-coffee'
+          />
+          <Card
+            className={styles.card}
+            name='DarkHorse Coffee'
+            imgUrl='/static/hero-image.png'
+            href='/coffee-store/darkhorse-coffee'
+          />
+        </div>
       </main>
     </div>
   );
