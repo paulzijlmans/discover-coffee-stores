@@ -8,7 +8,15 @@ import coffeeStores from '../data/coffee-stores.json';
 
 import styles from '../styles/Home.module.css';
 
-export default function Home() {
+export async function getStaticProps() {
+  return {
+    props: {
+      coffeeStores,
+    },
+  };
+}
+
+export default function Home(props) {
   function handleOnBannerBtnClick() {
     console.log('Banner button clicked!');
   }
@@ -35,7 +43,7 @@ export default function Home() {
           />
         </div>
         <div className={styles.cardLayout}>
-          {coffeeStores.map((store) => {
+          {props.coffeeStores.map((store) => {
             return (
               <Card
                 className={styles.card}
