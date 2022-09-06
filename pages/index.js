@@ -4,17 +4,9 @@ import Image from 'next/image';
 import Banner from '../components/banner/banner';
 import Card from '../components/card/card';
 
-import coffeeStoresData from '../data/coffee-stores.json';
+import coffeeStoresData from '../data/foursquare-api-data.json';
 
 import styles from '../styles/Home.module.css';
-
-export async function getStaticProps() {
-  return {
-    props: {
-      coffeeStores: coffeeStoresData,
-    },
-  };
-}
 
 export default function Home({ coffeeStores }) {
   function handleOnBannerBtnClick() {
@@ -51,9 +43,12 @@ export default function Home({ coffeeStores }) {
                   <Card
                     className={styles.card}
                     name={store.name}
-                    imgUrl={store.imgUrl}
-                    href={`/coffee-store/${store.id}`}
-                    key={store.id}
+                    imgUrl={
+                      store.imgUrl ||
+                      'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'
+                    }
+                    href={`/coffee-store/${store.fsq_id}`}
+                    key={store.fsq_id}
                   />
                 );
               })}
@@ -63,4 +58,12 @@ export default function Home({ coffeeStores }) {
       </main>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      coffeeStores: coffeeStoresData.results,
+    },
+  };
 }
