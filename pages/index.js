@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import Banner from '../components/banner/banner';
 import Card from '../components/card/card';
@@ -8,6 +8,7 @@ import useTrackLocation from '../hooks/use-track-location';
 import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 import styles from '../styles/Home.module.css';
+import { ACTION_TYPES, StoreContext } from './_app';
 
 export async function getStaticProps() {
   const coffeeStores = await fetchCoffeeStores();
@@ -20,22 +21,25 @@ export async function getStaticProps() {
 }
 
 export default function Home(props) {
-  const {
-    handleTrackLocation,
-    locationErrorMessage,
-    isFindingLocation,
-    latLong,
-  } = useTrackLocation();
+  const { handleTrackLocation, locationErrorMessage, isFindingLocation } =
+    useTrackLocation();
 
-  const [coffeeStores, setCoffeeStores] = useState([]);
   const [coffeeStoresError, setCoffeeStoresError] = useState(null);
+
+  const { dispatch, state } = useContext(StoreContext);
+  const { coffeeStores, latLong } = state;
 
   useEffect(() => {
     async function setCoffeeStoresByLocation() {
       if (latLong) {
         try {
           const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
-          setCoffeeStores(fetchedCoffeeStores);
+          dispatch({
+            type: ACTION_TYPES.SET_COFFEE_STORES,
+            payload: {
+              coffeeStores: fetchedCoffeeStores,
+            },
+          });
         } catch (error) {
           console.log({ error });
           setCoffeeStoresError(error.message);
@@ -65,9 +69,7 @@ export default function Home(props) {
         {locationErrorMessage && (
           <p>Something went wrong: {locationErrorMessage}</p>
         )}
-        {coffeeStoresError && (
-          <p>Something went wrong: {coffeeStoresError}</p>
-        )}
+        {coffeeStoresError && <p>Something went wrong: {coffeeStoresError}</p>}
         <div className={styles.heroImage}>
           <Image
             src='/static/hero-image.png'
