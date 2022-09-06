@@ -9,12 +9,12 @@ import styles from '../../styles/coffee-store.module.css';
 
 export async function getStaticProps({ params }) {
   const coffeeStores = await fetchCoffeeStores();
-
+  const findCoffeeStoreById = coffeeStores.find((store) => {
+    return store.id.toString() === params.id;
+  });
   return {
     props: {
-      coffeeStore: coffeeStores.find((store) => {
-        return store.id.toString() === params.id;
-      }),
+      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
     },
   };
 }
