@@ -1,28 +1,30 @@
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import cls from 'classnames';
 import Head from 'next/head';
 import Image from 'next/image';
-import cls from 'classnames';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import coffeeStoresData from '../../data/coffee-stores.json';
-
+import { fetchCoffeeStores } from '../../lib/coffee-stores';
 import styles from '../../styles/coffee-store.module.css';
 
 export async function getStaticProps({ params }) {
+  const coffeeStores = fetchCoffeeStores();
+
   return {
     props: {
-      coffeeStore: coffeeStoresData.find((store) => {
-        return store.id.toString() === params.id;
+      coffeeStore: coffeeStores.find((store) => {
+        return store.fsq_id.toString() === params.id;
       }),
     },
   };
 }
 
 export async function getStaticPaths() {
-  const paths = coffeeStoresData.map((store) => {
+  const coffeeStores = fetchCoffeeStores();
+  const paths = coffeeStores.map((store) => {
     return {
       params: {
-        id: store.id.toString(),
+        id: store.fsq_id.toString(),
       },
     };
   });
@@ -33,9 +35,7 @@ export async function getStaticPaths() {
   };
 }
 
-function CoffeeStore({
-  coffeeStore: { name, imgUrl, address, neighbourhood },
-}) {
+function CoffeeStore({ coffeeStore: { location, name, imgUrl } }) {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading</div>;
@@ -59,7 +59,10 @@ function CoffeeStore({
             <h1 className={styles.name}>{name}</h1>
           </div>
           <Image
-            src={imgUrl}
+            src={
+              imgUrl ||
+              'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'
+            }
             width={600}
             height={360}
             className={styles.storeImg}
@@ -74,7 +77,7 @@ function CoffeeStore({
               height={24}
               alt='icon'
             />
-            <p className={styles.text}>{address}</p>
+            <p className={styles.text}>{location.address}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
@@ -83,7 +86,7 @@ function CoffeeStore({
               height={24}
               alt='icon'
             />
-            <p className={styles.text}>{neighbourhood}</p>
+            <p className={styles.text}>{location.neighborhood[0]}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
