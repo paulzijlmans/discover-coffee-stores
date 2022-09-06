@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 
 import { fetchCoffeeStores } from '../../lib/coffee-stores';
+import { StoreContext } from '../../store/store-context';
+import { isEmpty } from '../../utils';
 
 import styles from '../../styles/coffee-store.module.css';
-import { isEmpty } from '../../utils';
-import { StoreContext } from '../_app';
 
 export async function getStaticProps({ params }) {
   const coffeeStores = await fetchCoffeeStores();

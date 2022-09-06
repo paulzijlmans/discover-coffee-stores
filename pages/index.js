@@ -6,9 +6,9 @@ import Banner from '../components/banner/banner';
 import Card from '../components/card/card';
 import useTrackLocation from '../hooks/use-track-location';
 import { fetchCoffeeStores } from '../lib/coffee-stores';
+import { ACTION_TYPES, StoreContext } from '../store/store-context';
 
 import styles from '../styles/Home.module.css';
-import { ACTION_TYPES, StoreContext } from './_app';
 
 export async function getStaticProps() {
   const coffeeStores = await fetchCoffeeStores();
