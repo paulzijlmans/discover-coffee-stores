@@ -3,10 +3,19 @@ import Image from 'next/image';
 
 import Banner from '../components/banner/banner';
 import Card from '../components/card/card';
-
-import coffeeStoresData from '../data/foursquare-api-data.json';
+import { fetchCoffeeStores } from '../lib/coffee-stores';
 
 import styles from '../styles/Home.module.css';
+
+export async function getStaticProps() {
+  const coffeeStores = fetchCoffeeStores();
+
+  return {
+    props: {
+      coffeeStores,
+    },
+  };
+}
 
 export default function Home({ coffeeStores }) {
   function handleOnBannerBtnClick() {
@@ -58,12 +67,4 @@ export default function Home({ coffeeStores }) {
       </main>
     </div>
   );
-}
-
-export async function getStaticProps() {
-  return {
-    props: {
-      coffeeStores: coffeeStoresData.results,
-    },
-  };
 }
